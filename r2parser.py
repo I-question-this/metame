@@ -1,6 +1,6 @@
 
-import metame.x86handler as x86handler
-import metame.constants as constants
+import tools.manipulation.metame.x86handler as x86handler
+import tools.manipulation.metame.constants as constants
 
 import r2pipe
 try:

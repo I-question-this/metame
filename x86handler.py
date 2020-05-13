@@ -1,5 +1,5 @@
 
-import metame.constants as constants
+import tools.manipulation.metame.constants as constants
 
 import re
 import random

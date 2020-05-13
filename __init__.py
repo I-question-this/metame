@@ -1,8 +1,15 @@
+import os
+import sys
+
+# Allows import of modules above this one
+MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
+TOP_MODULE_DIR = os.path.split(os.path.split(os.path.split(MODULE_DIR)[0])[0])[0]
+sys.path.append(os.path.realpath(TOP_MODULE_DIR))
 
 def main():
     import sys
     import shutil
-    import metame.r2parser as r2parser
+    import manipulation.metame.r2parser as r2parser
     import argparse
 
     parser = argparse.ArgumentParser(description="Metamorphic engine that modifies assembly code keeping the same functionality")
