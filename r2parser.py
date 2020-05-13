@@ -9,22 +9,29 @@ except:
     import json
 
 class R2Parser:
-    def __init__(self, filename, anal, debug=False, force_replace=False, write=False):
+    def __init__(self, filename, anal, debug=False, force_replace=False, write=False, arch=None, bits=None):
         self.debug = debug
         self.force = force_replace
-        flags = []
+        flags = ["-N"]
         if write:
             flags.append("-w")
         print("[INFO] Opening file with r2")
         self.r2 = r2pipe.open(filename, flags)
         info = json.loads(self.r2.cmd("ij").replace("\\", "\\\\"))
-        if "bin" not in info.keys():
-            raise Exception("[ERROR] File type not supported")
-        if not info["bin"]["bits"] in constants.supported_bits or \
-           not info["bin"]["arch"] in constants.supported_archs:
-            raise Exception("[ERROR] Architecture not supported")
-        self.arch = info["bin"]["arch"]
-        self.bits = info["bin"]["bits"]
+        if bits is None or arch is None:
+            if "bin" not in info.keys():
+                raise Exception("[ERROR] File type not supported")
+            if not info["bin"]["bits"] in constants.supported_bits or \
+               not info["bin"]["arch"] in constants.supported_archs:
+                raise Exception("[ERROR] Architecture not supported")
+            self.arch = info["bin"]["arch"]
+            self.bits = info["bin"]["bits"]
+        else:
+            self.arch = arch
+            self.bits = bits
+            self.r2.cmd(f"e asm.arch={arch}")
+            self.r2.cmd(f"e asm.bits={bits}")
+
         if anal:
             print("[INFO] Analyzing functions with r2")
             self.r2.cmd("aaa")
